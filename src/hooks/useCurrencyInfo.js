@@ -1,26 +1,23 @@
 import { useState, useEffect } from "react";
 
 function useCurrencyInfo(currency) {
-  const [data, setData] = useState({});
+  const [currData, setCurrData] = useState({});
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch(
           `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${currency}.json`
         );
-        return res.json();
+        const finalData = await res.json();
+        setCurrData(finalData[currency]);
       } catch (error) {
         console.log(error);
       }
-    };
-    async function setFinalData(){
-      const res = await fetchData();
-      const finalData = res[currency];
-      setData(finalData);
     }
-    setFinalData();
+    fetchData();
   }, [currency]);
-  return data;
+
+  return currData;
 }
 
 export default useCurrencyInfo;
